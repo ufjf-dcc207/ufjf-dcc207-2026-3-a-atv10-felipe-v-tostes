@@ -1,8 +1,8 @@
 export const INITIAL_CONFIG = {
   tubes: [
-    ['🔴', '🔵', '🔴', '🔵'],
-    ['🔵', '🔴', '🔵', '🔴'],
-    [] // Tubo vazio para movimentação
+    ['🟢', '🟡', '🟢', '🟡'],
+    ['🟡', '🟢', '🟡', '🟢'],
+    [] 
   ],
   selectedTube: null,
   hasWon: false
@@ -22,9 +22,7 @@ export function gameReducer(state: any, action: any) {
       const tubeIndex = action.payload;
       const { tubes, selectedTube } = state;
 
-      // Se nenhum tubo está selecionado
       if (selectedTube === null) {
-        // Não faz nada se clicar em um tubo vazio
         if (tubes[tubeIndex].length === 0) return state;
         
         return {
@@ -33,7 +31,6 @@ export function gameReducer(state: any, action: any) {
         };
       }
 
-      // Se o usuário clicou no mesmo tubo, deseleciona
       if (selectedTube === tubeIndex) {
         return {
           ...state,
@@ -41,18 +38,14 @@ export function gameReducer(state: any, action: any) {
         };
       }
 
-      // Lógica de movimentação entre tubos
       const sourceTube = [...tubes[selectedTube]];
       const targetTube = [...tubes[tubeIndex]];
 
-      // Regras: Tubo de destino não pode estar cheio (max 4 itens)
       if (targetTube.length >= 4) {
         return { ...state, selectedTube: null };
       }
 
       const itemToMove = sourceTube[sourceTube.length - 1];
-
-      // Move o item
       sourceTube.pop();
       targetTube.push(itemToMove);
 
